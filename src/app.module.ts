@@ -1,20 +1,27 @@
 import { Module } from '@nestjs/common';
 import { UsuariosModule } from './modules/users/usuarios.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsuarioEntity } from './models/usuario.entity';
-import { RolEntity } from './models/rol.entity';
+import { UsuarioEntity } from './models/Auth/usuario.entity';
+import { RolEntity } from './models/Auth/rol.entity';
+import { RolesModule } from './modules/roles/roles.module';
+import { PermisoEntity } from './models/Auth/permiso.entity';
 
 @Module({
-  imports: [UsuariosModule, TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: '192.168.1.35',
-      port: 5432,
-      username: 'francisco',
-      password: 'Pokeluchos2.',
-      database: 'AuthUsers',
-      entities: [UsuarioEntity, RolEntity],
-      synchronize: true,
-  })],
+  imports: [
+    TypeOrmModule.forRoot({
+        type: 'postgres',
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres',
+        password: 'Pokeluchos2.',
+        database: 'AuthUsers',
+        entities: [UsuarioEntity, RolEntity, PermisoEntity],
+        synchronize: true,
+      }
+    ),
+    UsuariosModule, 
+    RolesModule, 
+  ],
   controllers: [],
   providers: [],
 })

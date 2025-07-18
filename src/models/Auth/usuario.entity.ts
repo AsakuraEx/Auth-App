@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { RolEntity } from "./rol.entity";
 
 @Entity({name: 'mnt_usuarios'})
@@ -28,13 +28,13 @@ export class UsuarioEntity {
     @Column({type: 'bool', default: true})
     activo: boolean;
 
-    @Column({type: 'timestamptz', default: new Date(), nullable: false})
+    @CreateDateColumn({ type: 'timestamptz' })
     createdAt: Date;
 
-    @Column({type: 'timestamptz', default: new Date(), nullable: true})
+    @UpdateDateColumn({ type: 'timestamptz' })
     updatedAt: Date;
 
-    @OneToOne(()=> RolEntity)
+    @ManyToOne(()=> RolEntity, roles => roles.roles)
     @JoinColumn({name: 'rol_id'})
     rol_id: number;
 

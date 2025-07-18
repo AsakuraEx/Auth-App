@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RolEntity } from 'src/models/rol.entity';
-import { UsuarioEntity } from 'src/models/usuario.entity';
+import { RolEntity } from 'src/models/Auth/rol.entity';
+import { UsuarioEntity } from 'src/models/Auth/usuario.entity';
 import { Repository } from 'typeorm';
 import { UsuarioDto } from './dto/usuario.dto';
 
@@ -10,11 +10,10 @@ export class UsuariosService {
 
     constructor(
         @InjectRepository(UsuarioEntity) private usuarioRepository: Repository<UsuarioEntity>,
-        @InjectRepository(RolEntity) private rolRepository: Repository<RolEntity>
     ){}
 
-    async getRoles(){
-        return await this.rolRepository.find();
+    async getUsuarios(){
+        return await this.usuarioRepository.find();
     }
 
     async createUsuarios(user: UsuarioDto) {
@@ -38,6 +37,36 @@ export class UsuariosService {
 
         const result = await this.usuarioRepository.save(user)
         return result;
+    }
+
+    async updateUsuarios(usuario: UsuarioDto){
+
+        if(usuario.id){
+
+            //Se busca que el usuario no ingrese un correo ya existente o el mismo
+            let usuarioExiste: any = await this.searchByEmail(usuario.email);
+            if(usuarioExiste && usuario.id !== usuarioExiste.id){
+                throw new ConflictException('El email ya fue registrado para otro usuario');
+            }
+
+            usuarioExiste = await this.searchByDocumento(usuario.documento)
+            if(usuarioExiste && usuario.id !== usuarioExiste.id){
+                throw new ConflictException('El documento ya fue registrado para otro usuario');
+            }
+            if(usuario.telefono){
+                usuarioExiste = await this.searchByTelefono(usuario.telefono)
+                if(usuarioExiste && usuario.id !== usuarioExiste.id){
+                    throw new ConflictException('El telefono ya fue registrado para otro usuario');
+                }
+            }
+
+            const result = await this.usuarioRepository.save(usuario)
+            return result;
+
+        }else{
+            throw new NotFoundException('No se proporcionó un id de usuario')
+        }
+
     }
 
     async switchActivo(id: string){
