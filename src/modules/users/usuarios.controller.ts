@@ -23,14 +23,15 @@ export class UsuariosController {
         return this.userService.updateUsuarios(usuario)
     }
 
+    @Post('/auth')
+    validarUsuario(@Body() credenciales: CredencialesDto){
+        return this.userService.validarUsuario(credenciales)
+    }
+
     @Patch('/estado/:id')
     switchActivo(@Param('id') id: string){
         return this.userService.switchActivo(id)
     }
 
-    @Post('/auth')
-    validarUsuario(@Body() credenciales: CredencialesDto){
-        return this.userService.validarUsuario(credenciales)
-    }
 
 }
