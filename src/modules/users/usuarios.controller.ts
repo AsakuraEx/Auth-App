@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { UsuarioDto } from './dto/usuario.dto';
+import { CredencialesDto } from './dto/credenciales.dto';
 
 @Controller('api/v1/usuarios')
 export class UsuariosController {
@@ -25,6 +26,11 @@ export class UsuariosController {
     @Patch('/estado/:id')
     switchActivo(@Param('id') id: string){
         return this.userService.switchActivo(id)
+    }
+
+    @Post('/auth')
+    validarUsuario(@Body() credenciales: CredencialesDto){
+        return this.userService.validarUsuario(credenciales)
     }
 
 }

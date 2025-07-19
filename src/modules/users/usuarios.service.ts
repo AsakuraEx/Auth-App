@@ -1,9 +1,10 @@
 import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RolEntity } from 'src/models/Auth/rol.entity';
 import { UsuarioEntity } from 'src/models/Auth/usuario.entity';
 import { Repository } from 'typeorm';
 import { UsuarioDto } from './dto/usuario.dto';
+import * as bcrypt from 'bcrypt';
+import { CredencialesDto } from './dto/credenciales.dto';
 
 @Injectable()
 export class UsuariosService {
@@ -35,6 +36,12 @@ export class UsuariosService {
             }
         }
 
+        const saltOrRounds = 10;
+
+        const hashedPassword = await bcrypt.hash(user.contraseña, saltOrRounds)
+
+        user.contraseña = hashedPassword;
+
         const result = await this.usuarioRepository.save(user)
         return result;
     }
@@ -59,6 +66,12 @@ export class UsuariosService {
                     throw new ConflictException('El telefono ya fue registrado para otro usuario');
                 }
             }
+
+            const saltOrRounds = 10;
+
+            const hashedPassword = await bcrypt.hash(usuario.contraseña, saltOrRounds)
+
+            usuario.contraseña = hashedPassword;
 
             const result = await this.usuarioRepository.save(usuario)
             return result;
@@ -128,6 +141,24 @@ export class UsuariosService {
         return await this.usuarioRepository.findOne({
             where: { telefono: telefono }
         });
+
+    }
+
+    async validarUsuario(credenciales: CredencialesDto){
+
+        const usuario: UsuarioDto | null = await this.searchByEmail(credenciales.email);
+
+        if(!usuario){
+            throw new NotFoundException('El usuario al que intenta acceder no existe');
+        }
+
+        const contraseñasIguales = await bcrypt.compare(credenciales.contraseña, usuario.contraseña);
+
+        if(!contraseñasIguales){
+            throw new NotFoundException('Las credenciales son invalidas')
+        }
+
+        return {message: 'Login exitoso', status: 201 }
 
     }
 

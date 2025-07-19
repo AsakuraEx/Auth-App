@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { RolDto } from './dto/rol.dto';
 
@@ -25,6 +25,11 @@ export class RolesController {
     @Post()
     crearRol(@Body() rol: RolDto){
         return this.rolService.createRol(rol)
+    }
+    
+    @Put()
+    updateRol(@Body() rol: RolDto){
+        return this.rolService.updateRol(rol)
     }
 
 }

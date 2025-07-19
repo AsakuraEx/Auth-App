@@ -1,9 +1,10 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PermisoEntity } from 'src/models/Auth/permiso.entity';
 import { RolEntity } from 'src/models/Auth/rol.entity';
 import { Repository } from 'typeorm';
 import { RolDto } from './dto/rol.dto';
+import { PermisoDto } from './dto/permiso.dto';
 
 @Injectable()
 export class RolesService {
@@ -57,6 +58,37 @@ export class RolesService {
         }
 
         return this.rolRepository.save(rol);
+
+    }
+
+    async updateRol(rol: RolDto){
+
+        if(!rol.id){
+            throw new NotFoundException('Para actualizar debe proporcionar el id del Rol');
+        }
+
+        let permisos: any = [];
+        let permisoEncontrado;
+        for(const permiso of rol.permisos){
+            
+            if(permiso.id){
+                permisoEncontrado = await this.getPermisosById(permiso.id)
+                if(permisoEncontrado){
+                    permisos.push(permisoEncontrado)
+                }
+            }
+
+        }
+
+        if(permisos.length !== rol.permisos.length){
+            throw new BadRequestException('Uno o más permisos no existen')
+        }
+
+        rol.permisos = permisos;
+
+        const result = await this.rolRepository.save(rol)
+        return result;
+
 
     }
 

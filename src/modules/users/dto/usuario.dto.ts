@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsNotEmpty, isNotEmpty, IsNumber, IsOptional, IsPositive, IsString, isString, IsUUID } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, isNotEmpty, IsNumber, IsOptional, IsPositive, IsString, isString, IsUUID, Matches } from "class-validator";
 
 export class UsuarioDto {
 
@@ -28,6 +28,9 @@ export class UsuarioDto {
 
     @IsString()
     @IsNotEmpty()
+    @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\s/%]).{8,}$/, {
+        message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial (excepto / y %)',
+    })
     contraseña!: string;
 
     @IsBoolean()
