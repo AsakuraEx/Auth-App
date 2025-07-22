@@ -28,6 +28,9 @@ export class UsuarioEntity {
     @Column({type: 'bool', default: true})
     activo: boolean;
 
+    @Column({type: 'bool', default: false, nullable: true })
+    habilitado_2FA: boolean
+
     @CreateDateColumn({ type: 'timestamptz' })
     createdAt: Date;
 

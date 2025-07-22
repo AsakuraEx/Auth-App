@@ -50,5 +50,8 @@ export class UsuarioDto {
     @IsPositive()
     rol_id: number;
 
+    @IsBoolean()
+    @IsOptional()
+    habilitado_2fa?: boolean;
 
 }

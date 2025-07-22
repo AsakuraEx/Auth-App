@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/models/Auth/usuario.entity';
 import { Repository } from 'typeorm';
@@ -136,7 +136,7 @@ export class UsuariosService {
 
     }
 
-    async searchByTelefono(telefono: string){
+    async searchByTelefono(telefono: string) {
 
         return await this.usuarioRepository.findOne({
             where: { telefono: telefono }
@@ -149,16 +149,16 @@ export class UsuariosService {
         const usuario: UsuarioDto | null = await this.searchByEmail(credenciales.email);
 
         if(!usuario){
-            throw new NotFoundException('El usuario al que intenta acceder no existe');
+            return false
         }
 
         const contraseñasIguales = await bcrypt.compare(credenciales.contraseña, usuario.contraseña);
 
         if(!contraseñasIguales){
-            throw new NotFoundException('Las credenciales son invalidas')
+            throw new UnauthorizedException('Las credenciales son invalidas')
         }
 
-        return {message: 'Login exitoso', status: 201 }
+        return true
 
     }
 

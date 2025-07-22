@@ -8,6 +8,7 @@ import { UsuarioEntity } from 'src/models/Auth/usuario.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([UsuarioEntity])],
   controllers: [UsuariosController],
-  providers: [UsuariosService]
+  providers: [UsuariosService],
+  exports: [UsuariosService]
 })
 export class UsuariosModule {}
