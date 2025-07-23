@@ -40,9 +40,7 @@ export class SesionService {
                         const existeSesion = await this.getSesionByUsuario(usuario.id)
                         
                         if(existeSesion){
-                            if(existeSesion.id){   
-                                await this.eliminarSesion(existeSesion.id)
-                            }
+                            await this.eliminarSesion(existeSesion.token)
                         }
 
                     }
@@ -66,9 +64,19 @@ export class SesionService {
         throw new UnauthorizedException()
     }
 
-    async eliminarSesion(id: number){
+    async eliminarSesion(token: string){
 
-        await this.sesionRepository.delete(id)
+        const sesion = await this.sesionRepository.findOne({
+            where: {token: token}
+        })
+
+        if(!sesion){
+            throw new NotFoundException('No hay una sesión activa')
+        }
+
+        if(sesion.id){
+            await this.sesionRepository.delete(sesion.id)
+        }
 
     }
 

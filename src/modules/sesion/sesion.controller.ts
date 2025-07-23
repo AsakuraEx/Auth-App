@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { SesionService } from './sesion.service';
 import { CredencialesDto } from '../users/dto/credenciales.dto';
 
@@ -15,6 +15,11 @@ export class SesionController {
     @Post('/refresh')
     obtenerNuevoToken(@Body('token') token: string){
         return this.sesionService.obtenerNuevoToken(token)
+    }
+
+    @Delete()
+    eliminarSesion(@Body('token') token: string){
+        return this.eliminarSesion(token)
     }
 
 
