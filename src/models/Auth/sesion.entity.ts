@@ -7,16 +7,16 @@ export class SesionEntity {
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @Column({type: 'text', nullable: false, unique: true})
+    @Column({ type: 'text', nullable: false, unique: true })
     token: string;
 
-    @Column({type: 'bool', default: false})
-    refresh_token: boolean;
+    @Column({ type: 'text', nullable: true })
+    refresh_token: string;
 
-    @Column({type: 'timestamptz', nullable: true})
+    @Column({ type: 'timestamptz', nullable: true })
     expiracion: Date;
 
-    @Column({type:'text', nullable: true})
+    @Column({ type:'text', nullable: true })
     two_secret_password: string;
     
     @CreateDateColumn()
@@ -26,7 +26,7 @@ export class SesionEntity {
     UpdatedAt: Date;
 
     @OneToOne(()=>UsuarioEntity)
-    @JoinColumn({name: 'id_usuario'})
+    @JoinColumn({ name: 'id_usuario' })
     id_usuario: UsuarioEntity;
 
 

@@ -12,5 +12,10 @@ export class SesionController {
         return await this.sesionService.crearSesion(credenciales)
     }
 
+    @Post('/refresh')
+    obtenerNuevoToken(@Body('token') token: string){
+        return this.sesionService.obtenerNuevoToken(token)
+    }
+
 
 }

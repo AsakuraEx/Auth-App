@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsNotEmpty, IsNotEmptyObject, IsNumber, IsObject, IsOptional, IsPositive, IsString } from "class-validator";
+import { IsDate, IsNotEmpty, IsNotEmptyObject, IsNumber, IsObject, IsOptional, IsPositive, IsString } from "class-validator";
 import { UsuarioEntity } from "src/models/Auth/usuario.entity";
 
 export class SesionDto {
@@ -12,9 +12,9 @@ export class SesionDto {
     @IsNotEmpty()
     token!: string;
 
-    @IsBoolean()
+    @IsString()
     @IsOptional()
-    refresh_token?: boolean;
+    refresh_token?: string;
 
     @IsDate()
     @IsOptional()

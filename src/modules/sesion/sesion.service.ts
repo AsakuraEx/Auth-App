@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SesionEntity } from 'src/models/Auth/sesion.entity';
 import { Repository } from 'typeorm';
@@ -47,7 +47,7 @@ export class SesionService {
 
                     }
                         
-                    const sesion = await this.crearToken(usuario)
+                    const sesion: SesionDto = await this.crearToken(usuario)
                        
                     await this.sesionRepository.save(sesion)
 
@@ -83,22 +83,33 @@ export class SesionService {
             habilitado_2fa: usuario.habilitado_2fa 
         }
             
-        const token = await this.jwtService.signAsync(payload);
+        const token = await this.jwtService.signAsync(payload, {expiresIn: '2h'});
 
         const fechaActual = new Date();
         const expiracion = new Date(fechaActual.getTime() + 2 * 60 * 60 * 1000)
 
-        console.log('Ahora:', fechaActual.toISOString());
-        console.log('Expiración:', expiracion.toISOString());
-
+        const refresh_token = await this.crearRefreshToken(usuario.id)
 
         const sesion: SesionDto = {
             token: token,
             expiracion: expiracion,
             id_usuario: usuario,
+            refresh_token: refresh_token
         }
 
         return sesion
+
+    }
+
+    async crearRefreshToken(id: number){
+
+        const payload = {
+            id_usuario: id
+        }
+
+        const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '8h'})
+
+        return refresh_token;
 
     }
 
@@ -117,6 +128,41 @@ export class SesionService {
             return null
         }
         return sesion;
+    }
+
+    async obtenerNuevoToken(refresh_token: string){
+
+        const payload = await this.jwtService.verifyAsync(refresh_token);
+
+        const sesionActual = await this.getSesionByUsuario(payload.id_usuario);
+
+        if(!sesionActual){
+            throw new NotFoundException('No se puede renovar la sesión porque el usuario no posee una sesión registrada')
+        }
+
+        if(sesionActual.refresh_token !== refresh_token){
+            throw new UnauthorizedException('El refresh_token no coincide')
+        }
+            
+        const usuario = await this.usuarioService.searchById(payload.id_usuario);
+        
+        const sesion = await this.crearToken(usuario)
+
+
+        await this.sesionRepository.update(
+            {id_usuario: payload.id_usuario},
+            {
+                token: sesion.token,
+                refresh_token: sesion.refresh_token,
+                expiracion: new Date(Date.now() + 8 *60 * 60 * 1000)
+            }
+        )
+        
+        return {
+            token: sesion.token,
+            expiracion: sesion.expiracion
+        };
+        
     }
 
 }
