@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { RolDto } from './dto/rol.dto';
+import { SessionAuthGuard } from 'src/common/guards/session-auth/session-auth.guard';
 
 @Controller('api/v1/roles')
+@UseGuards(SessionAuthGuard)
 export class RolesController {
 
     constructor(private rolService: RolesService){}

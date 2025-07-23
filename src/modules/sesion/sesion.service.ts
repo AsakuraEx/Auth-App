@@ -86,17 +86,37 @@ export class SesionService {
         const token = await this.jwtService.signAsync(payload);
 
         const fechaActual = new Date();
-        fechaActual.setHours(fechaActual.getHours() + 2)
+        const expiracion = new Date(fechaActual.getTime() + 2 * 60 * 60 * 1000)
+
+        console.log('Ahora:', fechaActual.toISOString());
+        console.log('Expiración:', expiracion.toISOString());
 
 
         const sesion: SesionDto = {
             token: token,
-            expiracion: fechaActual,
+            expiracion: expiracion,
             id_usuario: usuario,
         }
 
         return sesion
 
+    }
+
+    async validarSesion(token: string){
+        const sesion = await this.sesionRepository.findOne({
+            where: { token },
+            relations: ['id_usuario']
+        })
+
+        if(!sesion) return null;
+
+        const fechaActual = Date.now();
+        const fechaExpiracion = sesion.expiracion.getTime();
+
+        if(fechaActual > fechaExpiracion){
+            return null
+        }
+        return sesion;
     }
 
 }

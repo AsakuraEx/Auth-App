@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { SesionController } from './sesion.controller';
 import { SesionService } from './sesion.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,13 +9,14 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     TypeOrmModule.forFeature([SesionEntity]),
-    UsuariosModule,
+    forwardRef(()=>UsuariosModule),
     JwtModule.register({
       secret: 'mi_clave_secreta',
       signOptions: { expiresIn: '2h' },
     })
   ],
   controllers: [SesionController],
-  providers: [SesionService]
+  providers: [SesionService],
+  exports: [SesionService]
 })
 export class SesionModule {}

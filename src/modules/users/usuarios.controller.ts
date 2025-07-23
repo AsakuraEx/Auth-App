@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { UsuarioDto } from './dto/usuario.dto';
 import { CredencialesDto } from './dto/credenciales.dto';
+import { SessionAuthGuard } from 'src/common/guards/session-auth/session-auth.guard';
 
 @Controller('api/v1/usuarios')
+@UseGuards(SessionAuthGuard)
 export class UsuariosController {
 
     constructor(private userService: UsuariosService){}

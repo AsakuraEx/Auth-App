@@ -8,7 +8,7 @@ export class SesionController {
     constructor(private sesionService: SesionService){}
 
     @Post()
-    async obtenerUsuarios(@Body() credenciales: CredencialesDto){ 
+    async crearSesion(@Body() credenciales: CredencialesDto){ 
         return await this.sesionService.crearSesion(credenciales)
     }
 
