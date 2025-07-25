@@ -39,7 +39,7 @@ export class UsuarioEntity {
 
     @ManyToOne(()=> RolEntity, roles => roles.roles)
     @JoinColumn({name: 'rol_id'})
-    rol_id: number;
+    rol_id: RolEntity;
 
 
 }

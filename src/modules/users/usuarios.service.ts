@@ -14,7 +14,14 @@ export class UsuariosService {
     ){}
 
     async getUsuarios(){
-        return await this.usuarioRepository.find();
+        return await this.usuarioRepository.find({
+            relations: ['rol_id'],
+            order: {
+                rol_id: {
+                    id: 'ASC'
+                }
+            }
+        });
     }
 
     async createUsuarios(user: UsuarioDto) {
@@ -101,7 +108,7 @@ export class UsuariosService {
                 { id },
                 { activo: nuevoEstado}
             );
-            return {message: nuevoEstado ? 'Activo': 'Inactivo'}
+            return this.getUsuarios()
 
         }catch(e){
             throw new InternalServerErrorException('Ocurrio un error al cambiar el estado del usuario');

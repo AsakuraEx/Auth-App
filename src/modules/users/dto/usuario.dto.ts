@@ -1,4 +1,5 @@
 import { IsBoolean, IsDate, IsNotEmpty, isNotEmpty, IsNumber, IsOptional, IsPositive, IsString, isString, IsUUID, Matches } from "class-validator";
+import { RolEntity } from "src/models/Auth/rol.entity";
 
 export class UsuarioDto {
 
@@ -48,7 +49,7 @@ export class UsuarioDto {
     @IsNumber()
     @IsNotEmpty()
     @IsPositive()
-    rol_id: number;
+    rol_id: RolEntity;
 
     @IsBoolean()
     @IsOptional()
