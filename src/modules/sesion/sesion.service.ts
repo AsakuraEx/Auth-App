@@ -61,7 +61,7 @@ export class SesionService {
 
         }
 
-        throw new UnauthorizedException()
+        throw new UnauthorizedException('El usuario al que intenta acceder no existe')
     }
 
     async eliminarSesion(token: string){
@@ -88,7 +88,8 @@ export class SesionService {
             nombre: usuario.nombre, 
             apellido: usuario.apellido, 
             activo: usuario.activo, 
-            habilitado_2fa: usuario.habilitado_2fa 
+            habilitado_2fa: usuario.habilitado_2fa,
+            rol_id: usuario.rol_id.id
         }
             
         const token = await this.jwtService.signAsync(payload, {expiresIn: '2h'});

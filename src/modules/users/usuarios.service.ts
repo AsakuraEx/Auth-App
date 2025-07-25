@@ -122,7 +122,8 @@ export class UsuariosService {
     async searchByEmail(email: string){
 
         return await this.usuarioRepository.findOne({
-            where: { email: email }
+            where: { email: email },
+            relations: ['rol_id']
         });
 
     }

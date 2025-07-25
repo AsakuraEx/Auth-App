@@ -19,7 +19,7 @@ export class SesionController {
 
     @Delete()
     eliminarSesion(@Body('token') token: string){
-        return this.eliminarSesion(token)
+        return this.sesionService.eliminarSesion(token)
     }
 
 
