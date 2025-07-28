@@ -5,7 +5,6 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
 import { SesionService } from 'src/modules/sesion/sesion.service';
 
 @Injectable()
@@ -30,6 +29,7 @@ export class SessionAuthGuard implements CanActivate {
     const sesionValida = await this.sesionService.validarSesion(token);
 
     if(!sesionValida){
+      await this.sesionService.eliminarSesion(token)
       throw new UnauthorizedException('La sesion ha expirado o es invalida');
     }
     
