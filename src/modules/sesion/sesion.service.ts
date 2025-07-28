@@ -51,7 +51,7 @@ export class SesionService {
 
                     return {
                         token: sesion.token,
-                        expiracion: sesion.expiracion
+                        refresh_token: sesion.refresh_token
                     }
                 }
     
@@ -92,7 +92,7 @@ export class SesionService {
             rol_id: usuario.rol_id.id
         }
             
-        const token = await this.jwtService.signAsync(payload, {expiresIn: '2h'});
+        const token = await this.jwtService.signAsync(payload, {expiresIn: '1m'});
 
         const fechaActual = new Date();
         const expiracion = new Date(fechaActual.getTime() + 2 * 60 * 60 * 1000)
@@ -116,7 +116,7 @@ export class SesionService {
             id_usuario: id
         }
 
-        const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '8h'})
+        const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '2m'})
 
         return refresh_token;
 
