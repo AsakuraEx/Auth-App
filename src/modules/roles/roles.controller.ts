@@ -14,7 +14,7 @@ export class RolesController {
         return this.rolService.getRoles();
     }
 
-    @Get()
+    @Get('/permisos')
     getPermisos(){
         return this.rolService.getPermisos();
     }

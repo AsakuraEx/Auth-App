@@ -92,7 +92,7 @@ export class SesionService {
             rol_id: usuario.rol_id.id
         }
             
-        const token = await this.jwtService.signAsync(payload, {expiresIn: '1m'});
+        const token = await this.jwtService.signAsync(payload, {expiresIn: '4h'});
 
         const fechaActual = new Date();
         const expiracion = new Date(fechaActual.getTime() + 2 * 60 * 60 * 1000)
@@ -116,7 +116,7 @@ export class SesionService {
             id_usuario: id
         }
 
-        const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '2m'})
+        const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '8h'})
 
         return refresh_token;
 

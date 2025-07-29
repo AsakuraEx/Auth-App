@@ -3,6 +3,7 @@ import { UsuariosService } from './usuarios.service';
 import { UsuarioDto } from './dto/usuario.dto';
 import { CredencialesDto } from './dto/credenciales.dto';
 import { SessionAuthGuard } from 'src/common/guards/session-auth/session-auth.guard';
+import { ActualizarUsuarioDto } from './dto/actualizarUsuario.dto';
 
 @Controller('api/v1/usuarios')
 @UseGuards(SessionAuthGuard)
@@ -21,7 +22,7 @@ export class UsuariosController {
     }
 
     @Put()
-    updateUsuarios(@Body() usuario: UsuarioDto){
+    updateUsuarios(@Body() usuario: ActualizarUsuarioDto){
         return this.userService.updateUsuarios(usuario)
     }
 

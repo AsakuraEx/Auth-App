@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { UsuarioDto } from './dto/usuario.dto';
 import * as bcrypt from 'bcrypt';
 import { CredencialesDto } from './dto/credenciales.dto';
+import { ActualizarUsuarioDto } from './dto/actualizarUsuario.dto';
 
 @Injectable()
 export class UsuariosService {
@@ -53,7 +54,7 @@ export class UsuariosService {
         return result;
     }
 
-    async updateUsuarios(usuario: UsuarioDto){
+    async updateUsuarios(usuario: ActualizarUsuarioDto){
 
         if(usuario.id){
 
@@ -74,11 +75,11 @@ export class UsuariosService {
                 }
             }
 
-            const saltOrRounds = 10;
-
-            const hashedPassword = await bcrypt.hash(usuario.contraseña, saltOrRounds)
-
-            usuario.contraseña = hashedPassword;
+            if(usuario.contraseña){
+                const saltOrRounds = 10;
+                const hashedPassword = await bcrypt.hash(usuario.contraseña, saltOrRounds)
+                usuario.contraseña = hashedPassword;
+            }
 
             const result = await this.usuarioRepository.save(usuario)
             return result;

@@ -15,12 +15,16 @@ export class RolesService {
     ){}
 
     async getRoles(){
-        return await this.rolRepository.find();
+        return await this.rolRepository.find({
+            order: {
+                id: 'ASC'
+            }
+        });
     }
 
     async getRolesById(id: number){
         return await this.rolRepository.findOne({
-            where: {id: id},
+            where: {id: id}
         })
     }
 
