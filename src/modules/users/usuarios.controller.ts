@@ -35,5 +35,10 @@ export class UsuariosController {
         return this.userService.switchActivo(id)
     }
 
+    @Get('/:id')
+    obtenerUsuarioPorId(@Param('id') id: string){
+        return this.userService.searchById(id);
+    }
+
 
 }

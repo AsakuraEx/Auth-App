@@ -12,7 +12,7 @@ import { SesionEntity } from './models/Auth/sesion.entity';
   imports: [
     TypeOrmModule.forRoot({
         type: 'postgres',
-        host: 'localhost',
+        host: '192.168.1.35',
         port: 5432,
         username: 'postgres',
         password: 'Pokeluchos2.',

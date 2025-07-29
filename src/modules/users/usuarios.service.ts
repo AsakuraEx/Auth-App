@@ -120,7 +120,8 @@ export class UsuariosService {
     async searchById(id: string){
 
         return await this.usuarioRepository.findOne({
-            where: { id: id }
+            where: { id: id },
+            relations: ['rol_id']
         });
 
     }   
