@@ -7,6 +7,8 @@ import { RolesModule } from './modules/roles/roles.module';
 import { PermisoEntity } from './models/Auth/permiso.entity';
 import { SesionModule } from './modules/sesion/sesion.module';
 import { SesionEntity } from './models/Auth/sesion.entity';
+import { ApiKeysModule } from './modules/api-keys/api-keys.module';
+import { ClienteApiEntity } from './models/api_keys/cliente_api.entity';
 
 @Module({
   imports: [
@@ -18,14 +20,14 @@ import { SesionEntity } from './models/Auth/sesion.entity';
         password: 'Pokeluchos2.',
         database: 'AuthUsers',
         entities: [
-          UsuarioEntity, RolEntity, PermisoEntity, SesionEntity
+          UsuarioEntity, RolEntity, PermisoEntity, SesionEntity, ClienteApiEntity
         ],
         synchronize: true,
       }
     ),
     UsuariosModule, 
     RolesModule, 
-    SesionModule, 
+    SesionModule, ApiKeysModule, 
   ],
   controllers: [],
   providers: [],
